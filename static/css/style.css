@@ -1,6 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #f8f9fa;
+    font-family: Aclonica, serif;
     color: #212529;
+}
+
+main {
+    background-image: url(https://assets.codepen.io/7124932/wispbackground.jpg?format=auto);
+    color: var(--theme-text-color);
+    padding: 120px 40px 40px 40px;
+    min-height: 100vh;
 }
 
 .navbar {
@@ -9,14 +22,14 @@ body {
 }
 
 .card {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9);
     border: none;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .form-control,
 .form-select {
-    background-color: #f8f9fa;
+    background-color: rgba(248, 249, 250, 0.9);
     color: #212529;
     border-color: rgba(0,0,0,0.1);
 }
@@ -29,4 +42,20 @@ body {
 
 .btn {
     min-width: 100px;
+}
+
+.gradient_text1 {
+    font-weight: bold;
+    background: -webkit-linear-gradient(#14a5ff, #8138ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    text-align: center;
+}
+
+.gradient_text2 {
+    font-weight: bold;
+    background: linear-gradient(#00ffee, #27aaff);
+    color: transparent;
+    -webkit-background-clip: text;
 }
