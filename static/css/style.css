@@ -17,13 +17,20 @@
 body {
     font-family: Aclonica, serif;
     color: var(--theme-text-color);
+    background-image: var(--theme-background);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 main {
-    background-image: var(--theme-background);
     color: var(--theme-text-color);
     padding: 120px 40px 40px 40px;
     min-height: 100vh;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .navbar {
