@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Text to Speech Converter</h2>
+                
+                <div class="mb-3">
+                    <label for="text-input" class="form-label">Enter Text</label>
+                    <textarea class="form-control" id="text-input" rows="5" 
+                              placeholder="Type or paste your text here..."></textarea>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="language-select" class="form-label">Language</label>
+                        <select class="form-select" id="language-select"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="voice-select" class="form-label">Voice</label>
+                        <select class="form-select" id="voice-select"></select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="rate-range" class="form-label">Speech Rate</label>
+                        <input type="range" class="form-range" id="rate-range" 
+                               min="0.5" max="2" step="0.1" value="1">
+                        <div class="text-center" id="rate-value">1.0x</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="volume-range" class="form-label">Volume</label>
+                        <input type="range" class="form-range" id="volume-range" 
+                               min="0" max="1" step="0.1" value="1">
+                        <div class="text-center" id="volume-value">100%</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-primary" id="play-btn">
+                        <i class="bi bi-play-fill"></i> Play
+                    </button>
+                    <button class="btn btn-secondary" id="pause-btn">
+                        <i class="bi bi-pause-fill"></i> Pause
+                    </button>
+                    <button class="btn btn-danger" id="stop-btn">
+                        <i class="bi bi-stop-fill"></i> Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/speech.js') }}"></script>
+{% endblock %}
