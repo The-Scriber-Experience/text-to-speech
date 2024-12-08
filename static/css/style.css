@@ -1,51 +1,30 @@
-:root[data-bs-theme="light"] {
-    --bs-body-bg: #f8f9fa;
-    --bs-body-color: #212529;
-    --bs-card-bg: #ffffff;
-}
-
-:root[data-bs-theme="dark"] {
-    --bs-body-bg: #212529;
-    --bs-body-color: #f8f9fa;
-    --bs-card-bg: #2c3034;
-}
-
 body {
-    transition: background-color 0.3s ease;
+    background-color: #f8f9fa;
+    color: #212529;
 }
 
 .navbar {
-    background-color: var(--bs-card-bg);
+    background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .card {
-    background-color: var(--bs-card-bg);
+    background-color: #ffffff;
     border: none;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-#theme-toggle {
-    padding: 0.5rem;
-    color: var(--bs-body-color);
-}
-
-.theme-icon-dark,
-.theme-icon-light {
-    font-size: 1.2rem;
-}
-
 .form-control,
 .form-select {
-    background-color: var(--bs-body-bg);
-    color: var(--bs-body-color);
+    background-color: #f8f9fa;
+    color: #212529;
     border-color: rgba(0,0,0,0.1);
 }
 
 .form-control:focus,
 .form-select:focus {
-    background-color: var(--bs-body-bg);
-    color: var(--bs-body-color);
+    background-color: #f8f9fa;
+    color: #212529;
 }
 
 .btn {
