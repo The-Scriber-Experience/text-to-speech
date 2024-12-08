@@ -4,13 +4,23 @@
     box-sizing: border-box;
 }
 
+:root {
+    --theme-background: url(https://assets.codepen.io/7124932/wispbackground.jpg?format=auto);
+    --theme-text-color: #212529;
+}
+
+[data-theme="space"] {
+    --theme-background: url(https://assets.codepen.io/7124932/spacebackground_00.png?format=auto);
+    --theme-text-color: #ffffff;
+}
+
 body {
     font-family: Aclonica, serif;
-    color: #212529;
+    color: var(--theme-text-color);
 }
 
 main {
-    background-image: url(https://assets.codepen.io/7124932/wispbackground.jpg?format=auto);
+    background-image: var(--theme-background);
     color: var(--theme-text-color);
     padding: 120px 40px 40px 40px;
     min-height: 100vh;
