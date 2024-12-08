@@ -129,3 +129,13 @@ main {
 .theme-switch__input:checked ~ .theme-switch__label::after {
     transform: translateX(40px);
 }
+.theme-switch__label span {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 8px;
+    width: 120px;
+    text-align: center;
+    font-size: 1.2rem;
+}
