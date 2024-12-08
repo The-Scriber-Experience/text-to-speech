@@ -16,6 +16,7 @@ class SpeechApp {
         this.playBtn = document.getElementById('play-btn');
         this.pauseBtn = document.getElementById('pause-btn');
         this.stopBtn = document.getElementById('stop-btn');
+        this.saveBtn = document.getElementById('save-btn');
         this.fileInput = document.getElementById('file-input');
 
         this.init();
@@ -40,6 +41,7 @@ class SpeechApp {
         this.playBtn.addEventListener('click', () => this.speak());
         this.pauseBtn.addEventListener('click', () => this.pause());
         this.stopBtn.addEventListener('click', () => this.stop());
+        this.saveBtn.addEventListener('click', () => this.saveText());
         this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
     }
 
@@ -137,6 +139,34 @@ class SpeechApp {
         this.speaking = false;
         this.paused = false;
         this.playBtn.classList.remove('disabled');
+    async saveText() {
+        const text = this.textInput.value.trim();
+        if (!text) {
+            alert('Please enter some text to save');
+            return;
+        }
+
+        try {
+            const response = await fetch('/save-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text }),
+            });
+
+            const data = await response.json();
+            
+            if (response.ok) {
+                alert('Text saved successfully!');
+            } else {
+                throw new Error(data.error || 'Failed to save text');
+            }
+        } catch (error) {
+            console.error('Error saving text:', error);
+            alert(error.message);
+        }
+    }
     }
 }
 
