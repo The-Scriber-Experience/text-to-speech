@@ -16,6 +16,7 @@ class SpeechApp {
         this.playBtn = document.getElementById('play-btn');
         this.pauseBtn = document.getElementById('pause-btn');
         this.stopBtn = document.getElementById('stop-btn');
+        this.fileInput = document.getElementById('file-input');
 
         this.init();
     }
@@ -39,6 +40,28 @@ class SpeechApp {
         this.playBtn.addEventListener('click', () => this.speak());
         this.pauseBtn.addEventListener('click', () => this.pause());
         this.stopBtn.addEventListener('click', () => this.stop());
+        this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+    }
+
+    handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (file.type !== 'text/plain') {
+            alert('Please upload a text (.txt) file');
+            this.fileInput.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            this.textInput.value = e.target.result;
+        };
+        reader.onerror = (e) => {
+            alert('Error reading file');
+            console.error('File reading error:', e);
+        };
+        reader.readAsText(file);
     }
 
     loadVoices() {
