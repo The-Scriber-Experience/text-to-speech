@@ -139,3 +139,33 @@ main {
     text-align: center;
     font-size: 1.2rem;
 }
+
+.card {
+    background: rgba(30, 30, 40, 0.85);  /* Dark semi-transparent background */
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    color: #fff;  /* Light text for dark background */
+}
+
+.form-label {
+    color: #fff;  /* Light text for form labels */
+}
+
+.form-control, .form-select {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
