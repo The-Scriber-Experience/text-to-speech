@@ -9,10 +9,13 @@ class SpeechApp {
         this.textInput = document.getElementById('text-input');
         this.languageSelect = document.getElementById('language-select');
         this.voiceSelect = document.getElementById('voice-select');
+        this.voiceFilter = document.getElementById('voice-filter');
         this.rateRange = document.getElementById('rate-range');
         this.volumeRange = document.getElementById('volume-range');
+        this.pitchRange = document.getElementById('pitch-range');
         this.rateValue = document.getElementById('rate-value');
         this.volumeValue = document.getElementById('volume-value');
+        this.pitchValue = document.getElementById('pitch-value');
         this.playBtn = document.getElementById('play-btn');
         this.pauseBtn = document.getElementById('pause-btn');
         this.stopBtn = document.getElementById('stop-btn');
@@ -38,6 +41,16 @@ class SpeechApp {
             this.volumeValue.textContent = `${Math.round(value * 100)}%`;
         });
 
+        this.pitchRange.addEventListener('input', () => {
+            const value = this.pitchRange.value;
+            this.pitchValue.textContent = `${value}x`;
+        });
+
+        // Add voice filter change handler
+        this.voiceFilter.addEventListener('change', () => {
+            this.updateVoiceList();
+        });
+
         // Add event listeners
         this.playBtn.addEventListener('click', () => this.speak());
         this.pauseBtn.addEventListener('click', () => this.pause());
@@ -59,16 +72,35 @@ class SpeechApp {
             
         // Update voices when language changes
         this.languageSelect.addEventListener('change', () => {
-            const selectedLang = this.languageSelect.value;
-            const filteredVoices = this.voices.filter(voice => voice.lang === selectedLang);
-            
-            this.voiceSelect.innerHTML = filteredVoices
-                .map(voice => `<option value="${voice.name}">${voice.name}</option>`)
-                .join('');
+            this.updateVoiceList();
         });
         
         // Trigger initial voice load
         this.languageSelect.dispatchEvent(new Event('change'));
+    }
+
+    updateVoiceList() {
+        const selectedLang = this.languageSelect.value;
+        const filterType = this.voiceFilter.value;
+        
+        let filteredVoices = this.voices.filter(voice => voice.lang === selectedLang);
+        
+        // Apply voice type filter
+        if (filterType !== 'all') {
+            // Simple gender detection based on voice name
+            filteredVoices = filteredVoices.filter(voice => {
+                const name = voice.name.toLowerCase();
+                if (filterType === 'male') {
+                    return name.includes('male') || name.includes('david') || name.includes('james');
+                } else {
+                    return name.includes('female') || name.includes('zira') || name.includes('sarah');
+                }
+            });
+        }
+        
+        this.voiceSelect.innerHTML = filteredVoices
+            .map(voice => `<option value="${voice.name}">${voice.name}</option>`)
+            .join('');
     }
 
     speak() {
@@ -95,6 +127,7 @@ class SpeechApp {
         // Set other properties
         utterance.rate = parseFloat(this.rateRange.value);
         utterance.volume = parseFloat(this.volumeRange.value);
+        utterance.pitch = parseFloat(this.pitchRange.value);
         
         // Add events
         utterance.onstart = () => {
