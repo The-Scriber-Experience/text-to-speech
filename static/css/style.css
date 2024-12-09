@@ -147,11 +147,28 @@ main {
 }
 
 .card-body {
-    color: #fff;  /* Light text for dark background */
+    color: #fff;  /* Default light text for dark background */
+}
+
+.card-title.gradient_text2 {
+    background: -webkit-linear-gradient(#14a5ff, #8138ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .form-label {
-    color: #fff;  /* Light text for form labels */
+    background: -webkit-linear-gradient(#14a5ff, #8138ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.text-center {
+    background: -webkit-linear-gradient(#14a5ff, #8138ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .form-control, .form-select {
