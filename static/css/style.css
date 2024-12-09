@@ -224,8 +224,9 @@ main {
     color: rgba(255, 255, 255, 0.5);
 }
 .form-control[type="file"] {
-    background: transparent;
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
     color: white;
     cursor: pointer;
     padding: 8px 12px;
@@ -234,9 +235,14 @@ main {
 .form-control[type="file"]::file-selector-button {
     background: linear-gradient(145deg, #00ffee, #27aaff);
     border: none;
+    border-radius: 6px;
     color: white;
     cursor: pointer;
     padding: 8px 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     margin-right: 12px;
+}
+
+.form-control[type="file"]:hover::file-selector-button {
+    background: linear-gradient(145deg, #27aaff, #00ffee);
 }
