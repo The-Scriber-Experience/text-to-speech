@@ -224,14 +224,19 @@ main {
     color: rgba(255, 255, 255, 0.5);
 }
 .form-control[type="file"] {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+.form-control[type="file"]::file-selector-button {
     background: linear-gradient(145deg, #00ffee, #27aaff);
     border: none;
     color: white;
     cursor: pointer;
     padding: 8px 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.form-control[type="file"]::-webkit-file-upload-button {
-    display: none;
+    margin-right: 12px;
 }
