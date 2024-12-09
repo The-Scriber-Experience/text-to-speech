@@ -148,7 +148,7 @@ class SpeechApp {
     async saveText() {
         const text = this.textInput.value.trim();
         if (!text) {
-            alert('Please enter some text to save');
+            this.showAlert('Please enter some text to save', 'danger');
             return;
         }
 
@@ -164,14 +164,41 @@ class SpeechApp {
             const data = await response.json();
             
             if (response.ok) {
-                alert('Text saved successfully!');
+                this.showAlert('Text saved successfully!', 'success');
             } else {
                 throw new Error(data.error || 'Failed to save text');
             }
         } catch (error) {
             console.error('Error saving text:', error);
-            alert(error.message);
+            this.showAlert(error.message, 'danger');
         }
+    }
+
+    showAlert(message, type) {
+        // Remove any existing alerts
+        const existingAlert = document.querySelector('.alert');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+
+        // Create new alert
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+        alertDiv.role = 'alert';
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+
+        // Insert alert after the buttons
+        const buttonGroup = document.querySelector('.d-flex.justify-content-center');
+        buttonGroup.parentNode.insertBefore(alertDiv, buttonGroup.nextSibling);
+
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            alertDiv.classList.remove('show');
+            setTimeout(() => alertDiv.remove(), 150);
+        }, 5000);
     }
 }
 
