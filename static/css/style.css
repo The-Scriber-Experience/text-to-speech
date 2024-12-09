@@ -165,10 +165,47 @@ main {
 }
 
 .text-center {
-    background: -webkit-linear-gradient(#14a5ff, #8138ff);
+    background: linear-gradient(#00ffee, #27aaff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+}
+
+.btn-primary {
+    background: linear-gradient(145deg, #00ffee, #27aaff);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(145deg, #27aaff, #00ffee);
+}
+
+.btn-secondary {
+    background: linear-gradient(145deg, #8138ff, #14a5ff);
+    border: none;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(145deg, #14a5ff, #8138ff);
+}
+
+.btn-danger {
+    background: linear-gradient(145deg, #ff3366, #ff0044);
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(145deg, #00ff88, #00cc66);
+    border: none;
+}
+
+.form-range::-webkit-slider-thumb {
+    background: linear-gradient(145deg, #00ffee, #27aaff);
+}
+
+.form-range::-moz-range-thumb {
+    background: linear-gradient(145deg, #00ffee, #27aaff);
 }
 
 .form-control, .form-select {
