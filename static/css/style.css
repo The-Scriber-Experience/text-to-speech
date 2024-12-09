@@ -270,3 +270,20 @@ main {
 .alert .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
+
+.form-select {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;  /* Make text white */
+}
+
+.form-select option {
+    background-color: #1e1e28;  /* Dark background for dropdown options */
+    color: #fff;  /* White text for options */
+}
+
+.form-select:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
