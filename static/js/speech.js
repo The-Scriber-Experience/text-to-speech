@@ -183,16 +183,17 @@ class SpeechApp {
 
         // Create new alert
         const alertDiv = document.createElement('div');
-        alertDiv.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
         alertDiv.role = 'alert';
         alertDiv.innerHTML = `
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         `;
 
-        // Insert alert after the buttons
+        // Insert alert inside the card body, after the button group
+        const cardBody = document.querySelector('.card-body');
         const buttonGroup = document.querySelector('.d-flex.justify-content-center');
-        buttonGroup.parentNode.insertBefore(alertDiv, buttonGroup.nextSibling);
+        cardBody.insertBefore(alertDiv, buttonGroup.nextSibling);
 
         // Auto-dismiss after 5 seconds
         setTimeout(() => {
