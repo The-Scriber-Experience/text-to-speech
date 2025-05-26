@@ -1,5 +1,4 @@
-from flask import render_template, request, jsonify
-from app import app
+from flask import render_template, request, jsonify, current_app as app
 import os
 from datetime import datetime
 
