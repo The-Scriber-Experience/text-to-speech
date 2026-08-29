@@ -24,6 +24,9 @@
     --gradient-producer: linear-gradient(135deg, #f472b6, #8b5cf6, #3b82f6);
     --gradient-producer-green: linear-gradient(135deg, #4ade80, #06b6d4, #3b82f6);
 
+    /* Font families */
+    --font-aclonica: 'Aclonica', sans-serif;
+
     /* Glassmorphism */
     --glass-bg: rgba(0, 0, 0, 0.5);
     --glass-gradient: linear-gradient(135deg, rgba(20, 181, 255, 0.1), rgba(0, 0, 0, 0.3));
@@ -36,7 +39,7 @@
 }
 
 body {
-    font-family: 'Aclonica', sans-serif;
+    font-family: var(--font-aclonica, 'Aclonica', sans-serif);
     color: var(--theme-text-color);
     background-image: var(--theme-background);
     background-size: cover;
@@ -45,12 +48,14 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 main {
     color: var(--theme-text-color);
-    padding: 120px 40px 40px 40px;
-    min-height: 100vh;
+    padding: 40px 20px;
+    flex: 1 0 auto;
     background: rgba(0, 0, 0, 0.15);
 }
 
@@ -383,4 +388,58 @@ main {
 .form-select option {
     background-color: #161b22;
     color: #fff;
+}
+
+/* Footer matching tse-landing-page */
+.footer {
+    width: 100%;
+    margin-top: auto;
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    padding: 2rem 1rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1.5rem !important;
+    background-image: none !important;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+.footer-main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.footer-logo {
+    width: 35px;
+    height: 35px;
+    filter: drop-shadow(0 0 8px rgba(0, 232, 255, 0.5));
+}
+
+.footer-text {
+    font-family: var(--font-aclonica, 'Aclonica', sans-serif);
+    background: linear-gradient(130deg, #00ffee, #10b981);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1rem !important;
+    margin: 0 !important;
+    font-weight: normal !important;
+    background-size: 200% auto !important;
+    animation: gradient-shift 5s ease infinite !important;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.4)) brightness(1.15);
 }
