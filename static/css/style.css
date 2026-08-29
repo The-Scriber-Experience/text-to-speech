@@ -5,12 +5,12 @@
 }
 
 :root {
-    --theme-background: url(https://assets.codepen.io/7124932/wispbackground.jpg?format=auto);
+    --theme-background: url(../images/wisp.jpg);
     --theme-text-color: #212529;
 }
 
 [data-theme="space"] {
-    --theme-background: url(https://assets.codepen.io/7124932/spacebackground_00.png?format=auto);
+    --theme-background: url(../images/spacebackground.png);
     --theme-text-color: #ffffff;
 }
 
@@ -20,7 +20,7 @@ body {
     background-image: var(--theme-background);
     background-size: cover;
     background-attachment: fixed;
-    background-position: center;
+    background-position: center top;
     min-height: 100vh;
     margin: 0;
     padding: 0;
