@@ -22,11 +22,12 @@ class SpeechApp {
         this.saveBtn = document.getElementById('save-btn');
         this.fileInput = document.getElementById('file-input');
 
-        // Custom Inworld voice (empty when not configured on the server)
-        this.inworldVoiceName = this.voiceSelect.dataset.inworldVoice;
-        this.inworldValue = '__inworld__';
+        // Custom Inworld voices like Walter Jr. and Winifred (empty when not configured on the server)
+        this.inworldVoices = JSON.parse(this.voiceSelect.dataset.inworldVoices || '[]');
+        this.inworldPrefix = 'inworld:';
+        this.appliedInworldKey = null;
         this.audio = null;
-        // Walter-only controls (not rendered when Inworld isn't configured)
+        // Inworld-only controls (not rendered when Inworld isn't configured)
         this.inworldOptions = document.getElementById('inworld-options');
         this.inworldTips = document.getElementById('inworld-tips');
         this.deliverySelect = document.getElementById('delivery-select');
@@ -67,7 +68,7 @@ class SpeechApp {
         if (this.instructionReset) {
             this.instructionReset.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.instructionInput.value = this.instructionInput.dataset.default;
+                this.instructionInput.value = this.selectedInworldVoice()?.instruction ?? '';
             });
         }
 
@@ -122,10 +123,11 @@ class SpeechApp {
         const options = filteredVoices
             .map(voice => `<option value="${voice.name}">${voice.name}</option>`);
 
-        // The custom Inworld voice is listed first so it's the default
-        if (this.inworldVoiceName) {
-            options.unshift(`<option value="${this.inworldValue}">${this.inworldVoiceName} (Inworld)</option>`);
-        }
+        // The custom Inworld voices are listed first so Walter Jr. is the default
+        const inworldOptions = this.inworldVoices
+            .filter(voice => filterType === 'all' || voice.gender === filterType)
+            .map(voice => `<option value="${this.inworldPrefix}${voice.key}">${voice.name} (Inworld)</option>`);
+        options.unshift(...inworldOptions);
 
         this.voiceSelect.innerHTML = options.join('');
 
@@ -136,13 +138,27 @@ class SpeechApp {
         this.updateVoiceControls();
     }
 
+    selectedInworldVoice() {
+        const value = this.voiceSelect.value;
+        if (!value.startsWith(this.inworldPrefix)) return undefined;
+        return this.inworldVoices.find(voice => voice.key === value.slice(this.inworldPrefix.length));
+    }
+
     updateVoiceControls() {
-        const isInworld = this.voiceSelect.value === this.inworldValue;
+        const inworldVoice = this.selectedInworldVoice();
+        const isInworld = Boolean(inworldVoice);
+
+        // Switching Inworld voices loads that voice's own delivery and direction
+        if (isInworld && inworldVoice.key !== this.appliedInworldKey) {
+            this.deliverySelect.value = inworldVoice.delivery_mode;
+            this.instructionInput.value = inworldVoice.instruction;
+            this.appliedInworldKey = inworldVoice.key;
+        }
 
         // Inworld has no pitch setting and only supports rates up to 1.5x
         this.pitchRange.disabled = isInworld;
         this.pitchValue.textContent = isInworld
-            ? `Not available for ${this.inworldVoiceName}`
+            ? `Not available for ${inworldVoice.name}`
             : `${this.pitchRange.value}x`;
         this.rateRange.max = isInworld ? '1.5' : '2';
         this.rateValue.textContent = `${this.rateRange.value}x`;
@@ -171,8 +187,9 @@ class SpeechApp {
             return;
         }
 
-        if (this.voiceSelect.value === this.inworldValue) {
-            this.speakInworld(text);
+        const inworldVoice = this.selectedInworldVoice();
+        if (inworldVoice) {
+            this.speakInworld(text, inworldVoice);
             return;
         }
 
@@ -216,7 +233,7 @@ class SpeechApp {
         this.synthesis.speak(utterance);
     }
 
-    async speakInworld(text) {
+    async speakInworld(text, inworldVoice) {
         this.speaking = true;
         this.playBtn.classList.add('disabled');
 
@@ -228,6 +245,7 @@ class SpeechApp {
                 },
                 body: JSON.stringify({
                     text,
+                    voice: inworldVoice.key,
                     rate: parseFloat(this.rateRange.value),
                     delivery_mode: this.deliverySelect.value,
                     instruction: this.instructionInput.value,

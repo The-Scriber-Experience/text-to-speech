@@ -29,6 +29,30 @@ INWORLD_DELIVERY_MODES = ('STABLE', 'BALANCED', 'CREATIVE')
 # Empty by default: directions reshape the voice, and Walter Jr. sounds most like himself without one.
 INWORLD_INSTRUCTION = os.environ.get('INWORLD_INSTRUCTION', '')
 INWORLD_INSTRUCTION_MAX_CHARS = 300
+
+# Voices shown in the dropdown. Winifred is Walter Jr.'s voice steered by a character direction,
+# which turns it into a distinct female voice.
+INWORLD_VOICES = {
+    'walter': {
+        'name': INWORLD_VOICE_NAME,
+        'gender': 'male',
+        'voice_id': INWORLD_VOICE_ID,
+        'delivery_mode': INWORLD_DELIVERY_MODE,
+        'instruction': INWORLD_INSTRUCTION,
+    },
+    'winifred': {
+        'name': os.environ.get('WINIFRED_VOICE_NAME', 'Winifred'),
+        'gender': 'female',
+        'voice_id': os.environ.get('WINIFRED_VOICE_ID', INWORLD_VOICE_ID),
+        'delivery_mode': os.environ.get('WINIFRED_DELIVERY_MODE', 'STABLE'),
+        'instruction': os.environ.get(
+            'WINIFRED_INSTRUCTION',
+            'speak like a mix of smeagol from lord of the rings with sneaky raspy scheming whispers and '
+            'will turner from pirates of the caribbean with earnest heroic sincerity and '
+            'walter bernard jr from the office with preppy eager slightly awkward charm',
+        ),
+    },
+}
 # Streaming requests allow 4,000 UTF-16 units; leave headroom for emoji and other wide characters
 INWORLD_CHUNK_CHARS = 3500
 
@@ -96,7 +120,8 @@ def last_instruction_tag(text):
     return ''
 
 
-def stream_inworld_audio(text, speaking_rate, delivery_mode=INWORLD_DELIVERY_MODE, instruction=''):
+def stream_inworld_audio(text, speaking_rate, voice_id=INWORLD_VOICE_ID, delivery_mode=INWORLD_DELIVERY_MODE,
+                         instruction=''):
     """Yield MP3 bytes from Inworld as they are generated, one text chunk at a time."""
     headers = {
         'Authorization': f'Basic {INWORLD_API_KEY}',
@@ -111,7 +136,7 @@ def stream_inworld_audio(text, speaking_rate, delivery_mode=INWORLD_DELIVERY_MOD
 
         payload = {
             'text': request_text,
-            'voice_id': INWORLD_VOICE_ID,
+            'voice_id': voice_id,
             'model_id': INWORLD_MODEL_ID,
             'audio_config': {
                 'audio_encoding': 'MP3',
@@ -145,20 +170,28 @@ def stream_inworld_audio(text, speaking_rate, delivery_mode=INWORLD_DELIVERY_MOD
 
 @app.route('/')
 def index():
-    # Only show the custom voice option when Inworld is configured
-    inworld_voice_name = INWORLD_VOICE_NAME if INWORLD_API_KEY and INWORLD_VOICE_ID else ''
+    # Only show the custom voices when Inworld is configured (voice IDs stay on the server)
+    inworld_voices = [
+        {
+            'key': key,
+            'name': voice['name'],
+            'gender': voice['gender'],
+            'delivery_mode': voice['delivery_mode'],
+            'instruction': voice['instruction'],
+        }
+        for key, voice in INWORLD_VOICES.items()
+        if voice['voice_id']
+    ] if INWORLD_API_KEY else []
     return render_template(
         'index.html',
-        inworld_voice_name=inworld_voice_name,
+        inworld_voices=inworld_voices,
         delivery_modes=INWORLD_DELIVERY_MODES,
-        default_delivery_mode=INWORLD_DELIVERY_MODE,
-        default_instruction=INWORLD_INSTRUCTION,
         instruction_max_chars=INWORLD_INSTRUCTION_MAX_CHARS,
     )
 
 @app.route('/synthesize', methods=['POST'])
 def synthesize():
-    if not INWORLD_API_KEY or not INWORLD_VOICE_ID:
+    if not INWORLD_API_KEY:
         return jsonify({'error': 'Inworld voice is not configured'}), 503
 
     try:
@@ -168,20 +201,24 @@ def synthesize():
         if not text:
             return jsonify({'error': 'Text is required'}), 400
 
+        voice = INWORLD_VOICES.get(data.get('voice', 'walter'))
+        if not voice or not voice['voice_id']:
+            return jsonify({'error': 'Unknown voice'}), 400
+
         # Inworld accepts speaking rates between 0.5 and 1.5
         speaking_rate = round(min(max(float(data.get('rate', 1.0)), 0.5), 1.5), 1)
 
-        delivery_mode = str(data.get('delivery_mode', INWORLD_DELIVERY_MODE)).upper()
+        delivery_mode = str(data.get('delivery_mode', voice['delivery_mode'])).upper()
         if delivery_mode not in INWORLD_DELIVERY_MODES:
-            delivery_mode = INWORLD_DELIVERY_MODE
+            delivery_mode = voice['delivery_mode']
 
         # An empty direction is allowed and means "no instruction, just the voice itself"
-        instruction = str(data.get('instruction', INWORLD_INSTRUCTION)).strip()[:INWORLD_INSTRUCTION_MAX_CHARS]
+        instruction = str(data.get('instruction', voice['instruction'])).strip()[:INWORLD_INSTRUCTION_MAX_CHARS]
 
         job = {
             'text': text,
             'rate': speaking_rate,
-            'voice': INWORLD_VOICE_ID,
+            'voice': voice['voice_id'],
             'model': INWORLD_MODEL_ID,
             'delivery_mode': delivery_mode,
             'instruction': instruction,
@@ -220,6 +257,7 @@ def audio(audio_id):
     audio_stream = stream_inworld_audio(
         job['text'],
         job['rate'],
+        job['voice'],
         job.get('delivery_mode', INWORLD_DELIVERY_MODE),
         job.get('instruction', ''),
     )

@@ -4,6 +4,7 @@ A live Flask application that converts text to speech using **Walter Jr.**, a cu
 
 ## Features
 - **Walter Jr.** as the default voice, streamed from Inworld so playback starts quickly, even for long text.
+- **Winifred**, a female voice built from Walter Jr.'s voice with a character direction.
 - No length limit: long text is split at sentence breaks and played back in order.
 - Generated audio is cached, so replaying the same text doesn't use Inworld credits.
 - Automatic fallback to a built-in browser voice if Inworld is unavailable (e.g., out of credits).
@@ -67,13 +68,24 @@ These environment variables are optional (set them in `.env` or your environment
 | `INWORLD_VOICE_NAME` | `Walter Jr.` | Name shown in the Voice dropdown |
 | `INWORLD_MODEL_ID` | `inworld-tts-2` | Inworld TTS model |
 | `INWORLD_DELIVERY_MODE` | `STABLE` | Default delivery: `STABLE`, `BALANCED`, or `CREATIVE`. Stable sounds most like Walter Jr. |
-| `INWORLD_INSTRUCTION` | *(empty)* | Optional default Character Direction sent with every request ([steering](https://docs.inworld.ai/tts/capabilities/steering.md)). Leave empty to keep Walter Jr.'s natural voice; see `.env.example` for a personality example. |
+| `INWORLD_INSTRUCTION` | *(empty)* | Optional default Character Direction for Walter Jr. ([steering](https://docs.inworld.ai/tts/capabilities/steering.md)). Leave empty to keep his natural voice. |
+
+### Winifred (Female Voice)
+
+Winifred uses Walter Jr.'s Inworld voice with a character direction (a mix of Sméagol, Will Turner, and Walter Bernard Jr.), which turns it into a distinct female voice. Both are listed in the Voice dropdown, and the Voice Type filter shows Walter Jr. under Male and Winifred under Female.
+
+| Variable | Default | Description |
+|---|---|---|
+| `WINIFRED_VOICE_NAME` | `Winifred` | Name shown in the Voice dropdown |
+| `WINIFRED_VOICE_ID` | Same as `INWORLD_VOICE_ID` | Inworld voice she is built on |
+| `WINIFRED_DELIVERY_MODE` | `STABLE` | `STABLE`, `BALANCED`, or `CREATIVE` |
+| `WINIFRED_INSTRUCTION` | Her character direction (see `app.py`) | The direction that creates her voice |
 
 Walter Jr. supports speech rates from 0.5x to 1.5x. Inworld has no pitch setting, so the Pitch slider is disabled while Walter Jr. is selected.
 
-When Walter Jr. is selected, the page also shows:
+When an Inworld voice (Walter Jr. or Winifred) is selected, the page also shows:
 - **Delivery:** Creative (most expressive), Balanced, or Stable (most consistent).
-- **Character Direction:** Optional plain-English note on how he should perform, like directing an actor. Blank by default, which keeps his natural voice.
+- **Character Direction:** A plain-English note on how the voice should perform, like directing an actor. Each voice loads its own default (blank for Walter Jr., her personality for Winifred); "Restore default" puts it back.
 - **Tags in the text:** Sounds like `[laugh]` or `[sigh]`, style changes like `[whisper]` that last until `[reset]`, and CAPS for emphasis. Browser voices skip these tags instead of reading them aloud.
 
 Inworld's free plan includes roughly 70 minutes (~70,000 characters) of audio per month; see [Inworld pricing](https://inworld.ai/pricing).
