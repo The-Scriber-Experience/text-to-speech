@@ -112,6 +112,9 @@ This project is configured for deployment on [Render](https://render.com/) witho
      - **Mount Path:** `/opt/render/project/src/saves`
      - **Size:** `1GB`
 
+### Troubleshooting
+- **Replaying text uses Inworld credits again after a redeploy:** The audio cache in `saves/audio_cache/` is wiped on every deploy unless the `saves-data` disk is attached. In Render, check **Disk** and confirm the mount path is `/opt/render/project/src/saves`.
+
 ## Project Structure
 - `app.py`: App entry point, Flask initialization, and API endpoints (including the Inworld streaming proxy).
 - `saves/audio_cache/`: Cached Walter Jr. audio (created automatically, not committed).
