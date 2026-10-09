@@ -2,13 +2,13 @@ services:
   - type: web
     name: text-to-speech
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    buildCommand: uv sync --frozen
+    startCommand: uv run --frozen gunicorn --threads 4 --timeout 120 app:app
     envVars:
       - key: FLASK_SECRET_KEY
         generateValue: true
-      - key: PYTHON_VERSION
-        value: 3.11.0
+      - key: INWORLD_API_KEY
+        sync: false
     disk:
       name: saves-data
       mountPath: /opt/render/project/src/saves

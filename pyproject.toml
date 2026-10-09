@@ -1,0 +1,12 @@
+[project]
+name = "text-to-speech"
+version = "0.1.0"
+description = "Flask text-to-speech app featuring the Walter Jr. Inworld voice"
+requires-python = ">=3.11"
+dependencies = [
+    "email-validator==2.2.0",
+    "flask==3.1.0",
+    "gunicorn==25.3.0",
+    "python-dotenv==1.2.4",
+    "requests==2.32.3",
+]

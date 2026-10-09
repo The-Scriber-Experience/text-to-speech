@@ -14,6 +14,13 @@
                     <label for="text-input" class="form-label gradient_text1">Enter Text</label>
                     <textarea class="form-control" id="text-input" rows="5" 
                               placeholder="Type or paste your text here..."></textarea>
+                    {% if inworld_voice_name %}
+                    <div class="form-text" id="inworld-tips">
+                        {{ inworld_voice_name }} tips: add sounds like <code>[laugh]</code> <code>[sigh]</code> <code>[gasp]</code>,
+                        change his delivery with <code>[whisper]</code> or <code>[say sneakily in a low tone]</code>
+                        (it lasts until <code>[reset]</code>), and use CAPS to stress a WORD.
+                    </div>
+                    {% endif %}
                     <div class="mt-2">
                         <label for="file-input" class="form-label gradient_text2">Or upload a text file</label>
                         <input type="file" class="form-control" id="file-input" accept=".txt">
@@ -27,9 +34,36 @@
                     </div>
                     <div class="col-md-6">
                         <label for="voice-select" class="form-label gradient_text2">Voice</label>
-                        <select class="form-select" id="voice-select"></select>
+                        <select class="form-select" id="voice-select"
+                                data-inworld-voice="{{ inworld_voice_name }}"></select>
                     </div>
                 </div>
+
+                {% if inworld_voice_name %}
+                <div class="row mb-3" id="inworld-options">
+                    <div class="col-md-4">
+                        <label for="delivery-select" class="form-label gradient_text2">Delivery</label>
+                        <select class="form-select" id="delivery-select">
+                            {% for mode in delivery_modes %}
+                            <option value="{{ mode }}" {% if mode == default_delivery_mode %}selected{% endif %}>{{ mode|title }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Stable sounds most like {{ inworld_voice_name }}; Creative is wilder.</div>
+                    </div>
+                    <div class="col-md-8">
+                        <label for="instruction-input" class="form-label gradient_text2">Character Direction</label>
+                        <input type="text" class="form-control" id="instruction-input"
+                               maxlength="{{ instruction_max_chars }}"
+                               value="{{ default_instruction }}"
+                               data-default="{{ default_instruction }}"
+                               placeholder="Optional, e.g. say sneakily in a low tone">
+                        <div class="form-text">
+                            How {{ inworld_voice_name }} should perform, like directing an actor. Leave blank for his natural voice.
+                            {% if default_instruction %}<a href="#" id="instruction-reset">Restore default</a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
 
                 <div class="row mb-3">
                     <div class="col-md-6">
